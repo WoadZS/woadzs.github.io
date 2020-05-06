@@ -1,0 +1,234 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>利用 Pump 修复 gulp-uglify 报错 | WoadZS&#39;s Blog</title>
+<link rel="shortcut icon" href="https://woadzs.github.io/favicon.ico?v=1588737439183">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://woadzs.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha256-V8SV2MO1FUb63Bwht5Wx9x6PVHNa02gv8BgH/uH3ung=" crossorigin="anonymous">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            WoadZS&#39;s Blog
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/aboutme" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    利用 Pump 修复 gulp-uglify 报错
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2017-10-14 ·
+                    </time>
+                    
+                        <a href="https://woadzs.github.io/tag/39SWCKD1aJ/" class="post-tags">
+                            # Hexo
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>在安装完 Hexo 后很多人都会对自己的静态博客进行优化，期中有相当一部分人就会用到 <code>gulp-uglify</code> 这个插件来压缩 js 文件。然而有时候会遇到插件报错，这个时候可以使用 <code>Pump</code> 来替代原有的 <code>Pipe</code> 就可以解决问题。</p>
+<!-- more -->
+<h2 id="pipe-与-pump-的区别">Pipe 与 Pump 的区别</h2>
+<p>网上很多利用 <code>gulp-uglify</code> 的教程里面都会使用 <code>Pipe</code>, 然而一旦发生错误，这些错误并不会通过管道流( piped streams )传播，因此源流并不会因为目标流的关闭而关闭。<br><br>
+<code>Pump</code> 则能规范化这些问题并能在回调中把这些错误显示出来，简而言之， <code>Pump</code> 能让你更好地地位错误发生点。</p>
+<h2 id="一种较为常见的-gulpfile-文件范例">一种较为常见的 gulpfile 文件范例</h2>
+<p>网上很多教程 gulpfile 中关于 gulp-uglify 的部分都是这么写的：</p>
+<pre><code class="language-js">// example of a common gulpfile
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+
+gulp.task('compress', function () {
+  // returns a Node.js stream, but no handling of error messages
+  return gulp.src('lib/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+});
+</code></pre>
+<p>当我们实际运行的时候可能会遇上下面这种不知所云的错误，你压根儿没办法知道到底是哪个鸟文件其中的哪一行出现了问题。<br>
+<img src="https://i.loli.net/2017/10/15/59e2a082a4a9e.png" alt="pipe-error.png" loading="lazy"><br><br>
+Node.js 遇到这种错误的一般做法也是：</p>
+<blockquote>
+<p>By default, Node.js handles such exceptions by printing the stack trace to stderr and exiting.</p>
+</blockquote>
+<p>至于处理办法，传统的做法就是分流进行处理，这里不在赘述。<s>其实是自己压根儿不懂。</s><br><br>
+具体解决办法可以参见<a href="https://github.com/terinjokes/gulp-uglify/blob/master/docs/why-use-pump/README.md#handling-the-errors">这里</a>。</p>
+<h2 id="使用-pump">使用 Pump</h2>
+<p><code>Pump</code> 就是一个比较取巧的模组，能帮你解决 <code>Pipe</code> 搞不定的那些事，首先可以通过如下命令安装 <code>Pump</code>:<br></p>
+<pre><code class="language-bash">npm install pump
+</code></pre>
+<p>然后上文的代码能够很简单的更改为为：</p>
+<pre><code class="language-js">var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var pump = require('pump');
+
+gulp.task('compress', function (cb) {
+  pump([
+      gulp.src('lib/*.js'),
+      uglify(),
+      gulp.dest('dist')
+    ],
+    cb
+  );
+});
+</code></pre>
+<p>这样以来 <code>Pump</code> 就可以很轻松的告诉你到底哪儿有错，方便你进行调试。<br><br>
+<img src="https://i.loli.net/2017/10/15/59e2a480828b3.png" alt="pump-error-2.png" loading="lazy"><br><br>
+而且有时候， <code>Pump</code> 会很神奇地完美执行好 <code>Pipe</code> 会报错的代码，因此可能到最后，你得到的就是完美的输出结果。<s>其实是我又没弄懂哪儿出问题了</s></p>
+<p>参考文献：<br></p>
+<blockquote>
+<p><a href="https://github.com/terinjokes/gulp-uglify/blob/master/docs/why-use-pump/README.md#why-use-pump">Why Use Pump?</a><br><br>
+<a href="http://liuzhixuan360.com/2017/06/14/gulp-uglify%E6%8F%92%E4%BB%B6%E6%9C%80%E6%96%B0pump%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/">gulp-uglify插件最新pump使用教程</a></p>
+</blockquote>
+                    
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://woadzs.github.io/post/ftp_deploy_to_VH/" class="post-title gt-a-link">
+                    FTP 部署 Hexo 博客到虚拟主机
+                </a>
+            </div>
+        
+
+        
+            
+
+            
+                <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css">
+<script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+
+<div id="disqus_thread"></div>
+
+<script>
+
+var options = {
+  shortname: 'woadzsme',
+  apikey: 'fC4tgprZlSQ1dtSB5qiT2I5gPh4j6CXKhEy0Kqs1BkT6FFs6xK47EPjRALBEH4JS',
+}
+if ('') {
+  options.api = ''
+}
+var dsqjs = new DisqusJS(options)
+
+</script>
+
+            
+        
+		
+		
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">知而不行 是为不知</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/WoadZS" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://woadzs.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

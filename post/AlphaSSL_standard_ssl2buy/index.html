@@ -1,0 +1,244 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>更换 AlphaSSL 单域名证书加速国内 OCSP 认证遇到的坑 | WoadZS&#39;s Blog</title>
+<link rel="shortcut icon" href="https://woadzs.github.io/favicon.ico?v=1588737439183">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+<link rel="stylesheet" href="https://woadzs.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha256-V8SV2MO1FUb63Bwht5Wx9x6PVHNa02gv8BgH/uH3ung=" crossorigin="anonymous">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            WoadZS&#39;s Blog
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/aboutme" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
+</nav>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    更换 AlphaSSL 单域名证书加速国内 OCSP 认证遇到的坑
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2018-04-11 ·
+                    </time>
+                    
+                        <a href="https://woadzs.github.io/tag/QgWy9tVVz/" class="post-tags">
+                            # 主机壳
+                        </a>
+                    
+                        <a href="https://woadzs.github.io/tag/zaFqZ51pq7/" class="post-tags">
+                            # Netlify
+                        </a>
+                    
+                        <a href="https://woadzs.github.io/tag/CklYm5Te-H/" class="post-tags">
+                            # SSL
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>最近决定更换一下我的博客大陆访问时候所用的 SSL 证书，于是到 <a href="https://www.ssl2buy.com/">SSL2BUY</a> 上买了一个 AlphaSSL 的单域名证书，然而这才是坑的开始。因为按照最初的设置，这货弄出来只支持 WWW Domain, 显然这是不科学的。</p>
+<!-- more -->
+<h2 id="更换背景">更换背景</h2>
+<h3 id="原因及分析">原因及分析</h3>
+<p>起因是最近一次测试国内访问速度的时候，发现原来使用的 <code>COMODO ECC</code> 单域名证书在进行在线证书状态协议 <code>OCSP</code> 这种阻断式认证的时候，延时在某些情况下可能会达到 2s. 这简直就是一件不能忍的事情。</p>
+<p><code>COMODO ECC</code> 的 <code>OCSP</code> 校验地址是 <a href="http://ocsp.comodoca.com">http://ocsp.comodoca.com</a>, 感兴趣的话可以测试一下延迟，国内应该是解析到一个英国的 IP 上。另外附上<code>COMODO ECC</code> 的 <code>CRL</code> 证书撤销列表地址：<a href="http://crl.comodoca.com/COMODOECCDomainValidationSecureServerCA.crl">http://crl.comodoca.com/COMODOECCDomainValidationSecureServerCA.crl</a></p>
+<p>然而我国内访问所使用的主机供应商<a href="https://i.zhujike.com/flag/5382">主机壳</a>并不能开启 <code>OCSP Stapling</code> 来避免这一延迟。因此只有采取更换有更快 <code>OCSP</code> 访问速度的证书来改善访问体验。</p>
+<h3 id="为什么是-alphassl">为什么是 <code>AlphaSSL</code></h3>
+<p>这个很简单， <code>AlphaSSL</code> 的 <code>OCSP</code> 校验地址是 <a href="http://ocsp2.globalsign.com/gsalphasha2g2">http://ocsp2.globalsign.com/gsalphasha2g2</a>, 这个地址通过测试会发现大陆有众多访问节点，延迟极低。采用同样服务器的还有 <code>GlobalSign</code> 的证书，毕竟是一家，但由于定位问题，价格肯定是 AlphaSSL 便宜。</p>
+<p>什么？为什么不申请那些由国内 CA 签发的免费证书，比如<a href="https://www.trustauth.cn/free-ssl">数安时代</a>? 还是信任问题，WoSign 事件早就把国内 CA 的信用败光了。况且看了下数安的申请流程，还要联系客服什么的，真是麻烦。</p>
+<h3 id="为什么不选择-alphassl-wildcard-而选择单域名证书">为什么不选择 AlphaSSL WildCard 而选择单域名证书</h3>
+<p>市面上的 AlphaSSL WildCard 除了正规购买的，就是通过滥用某主机商福利生成的。后者虽然免费，但风险不低，随时可能被 Revoke, 且有违道德。</p>
+<p>再一个就是我目前没有泛域名使用需求，购买价格高昂的泛域名实属没事找事。</p>
+<p>选择 <a href="https://www.ssl2buy.com/">SSL2BUY</a> 纯粹是因为其价格和口碑，比淘宝上口碑特别好的代理商价格还便宜。</p>
+<h2 id="购买流程">购买流程</h2>
+<p>这个似乎没有什么好写的，下单，付款，提交 CSR, 进行 DNS 认证然后就能收到证书。</p>
+<h2 id="坑及解决方案">坑及解决方案</h2>
+<h3 id="生成的证书仅支持-www-域名而不支持-non-www-域名">生成的证书仅支持 WWW 域名而不支持 non-WWW 域名</h3>
+<p>最开始，我生成的证书仅包括了 <a href="www.woadzs.me">www.woadzs.me</a> 这个 WWW 域名而不包含 <a href="woadzs.me">woadzs.me</a> 这个裸域。这显然是不正常的。后来发现这是标准证书申请的一个坑，泛域名压根儿碰不到这种情况。</p>
+<p>根据 <a href="https://support.globalsign.com/customer/en/portal/articles/2644394-domain-verification-changes">Domain Verification Changes</a> 提供的信息，按照 GlobalSign 的规定为了 SSL 同时支持 WWW 和 non-WWW, 正确的操作应该是<strong>提交以 www.example.com 为 Common Name 的 CSR. 在认证的时候，无论是通过 URL 还是 DNS TXT 记录认证，都必须在 example.com 下进行域名所有权验证。</strong></p>
+<p>正确的操作只有上面一条，手抖把 non-WWW 写成了 CN 或者是使用 WWW 进行了验证或者是其他排列组合，都只能收到“残废”证书。</p>
+<h3 id="在线补全证书链不正常">在线补全证书链不正常</h3>
+<p>我们都有拿到新证书先补全证书链的习惯，而我们也似乎都习惯于使用在线的证书补全工具，比如 <a href="https://myssl.com/chain_download.html">MySSL.com 证书链修复</a> 和 <a href="https://certificatechain.io/">certificatechain.io</a>.</p>
+<p>然而这些在线证书链在补全 <code>AlphaSSL Standard Certificate</code> 的时候，所提供的中级证书 <code>Intermediate Certificates</code> 并不是用来签署我这个新证书的那一个。</p>
+<p>**原因是 GlobalSign 和 AlphaSSL 为 2014 年 3 月 31 号之后签署的新 DV 证书启用了新的中级证书，而网上自动补全的统统是给补老中级证书。**新老中级证书快速判断的标准就是有效期：</p>
+<ul>
+<li>新中级证书有效期为 20 February 2024</li>
+<li>老中级证书有效期为 02 August 2022</li>
+</ul>
+<p>适用于 AlphaSSL 的新老中级证书，除了在证书签发的通知邮箱里面会告知具体链接，也可以在 <a href="https://www.alphassl.com/support/install-root-certificate.html">Install Root Certificate</a> 找到。</p>
+<p>PS: 无论是 AlphaSSL 还是 Let's Encrypt, 现在的中级证书都是基于 RSA 2048 bits 的， ECC 的中级证书还需要等等。Let's Encrypt 给出的<a href="https://letsencrypt.org/upcoming-features/">时间点</a>是 2018 年 Q3 <s>然而已经跳票多次</s>. 而 AlphaSSL 没有给出具体时间节点。</p>
+<h2 id="对主机壳和-netlify-的碎碎念">对主机壳和 Netlify 的碎碎念</h2>
+<ul>
+<li>求开通 HSTS 功能 ← 本条仅针对主机壳</li>
+<li>求开通 OCSP 装订配置</li>
+<li>求开通 ECC 证书支持 ← 本条仅针对 Netlify</li>
+</ul>
+<h2 id="后记目前2018-年-4-月网站的-ssl-配置及虚拟空间特性">后记——目前（2018 年 4 月）网站的 SSL 配置及虚拟空间特性</h2>
+<h3 id="大陆访问主机壳">大陆访问（<a href="https://i.zhujike.com/flag/5382">主机壳</a>）</h3>
+<ul>
+<li>AlphaSSL ECDSA 256 bits</li>
+<li>全站 HTTPS</li>
+<li>全站 HTTP/2</li>
+<li>静态资源访问大陆 CDN</li>
+<li>网页本体访问香港 CDN</li>
+<li>详细证书信息可查看 <a href="https://myssl.com/woadzs.me?domain=woadzs.me">MySSL.com</a></li>
+</ul>
+<h3 id="海外访问netlify">海外访问（<a href="https://www.netlify.com/">Netlify</a>）</h3>
+<ul>
+<li>Let's Encrypt RSA 2048 bits</li>
+<li>全站 HTTPS 且加入 HSTS 标记</li>
+<li>全站 HTTP/2</li>
+<li>全站访问 Amazon CloudFront CDN</li>
+<li>详细证书信息可查看 <a href="https://www.ssllabs.com/ssltest/analyze.html?d=woadzs.me">SSLLabs</a></li>
+</ul>
+                    
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://woadzs.github.io/post/fix_gulp_uglify_error/" class="post-title gt-a-link">
+                    利用 Pump 修复 gulp-uglify 报错
+                </a>
+            </div>
+        
+
+        
+            
+
+            
+                <link rel="stylesheet" href="https://unpkg.com/disqusjs@1.1/dist/disqusjs.css">
+<script src="https://unpkg.com/disqusjs@1.1/dist/disqus.js"></script>
+
+<div id="disqus_thread"></div>
+
+<script>
+
+var options = {
+  shortname: 'woadzsme',
+  apikey: 'fC4tgprZlSQ1dtSB5qiT2I5gPh4j6CXKhEy0Kqs1BkT6FFs6xK47EPjRALBEH4JS',
+}
+if ('') {
+  options.api = ''
+}
+var dsqjs = new DisqusJS(options)
+
+</script>
+
+            
+        
+		
+		
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">知而不行 是为不知</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/WoadZS" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://woadzs.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
