@@ -1,38 +1,49 @@
 <html>
 <head>
-    <meta charset="utf-8"/>
-<meta name="description" content=""/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <title>Hexo | WoadZS&#39;s Blog</title>
 
-<link rel="shortcut icon" href="https://blog.woadzs.me/favicon.ico?v=1596178075079">
+<link rel="shortcut icon" href="https://blog.woadzs.me/favicon.ico?v=1631078479730">
 
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://blog.woadzs.me/styles/main.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<style>
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
 <!-- DEMO JS -->
 <!--<script src="media/scripts/index.js"></script>-->
 
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-78832169-1"></script>
-  <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-          dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-78832169-1');
-  </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-78832169-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-78832169-1');
+</script>
 
 </head>
 <body>
@@ -46,54 +57,65 @@
         </div>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
         <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="navbar-nav mr-auto" style="text-align: center">
             
-                <div class="nav-item">
-                    
-                        <a href="/" class="menu gt-a-link">
-                            首页
-                        </a>
-                    
-                </div>
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
             
-                <div class="nav-item">
-                    
-                        <a href="/archives" class="menu gt-a-link">
-                            归档
-                        </a>
-                    
-                </div>
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
             
-                <div class="nav-item">
-                    
-                        <a href="/tags" class="menu gt-a-link">
-                            标签
-                        </a>
-                    
-                </div>
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
             
-                <div class="nav-item">
-                    
-                        <a href="/post/aboutme" class="menu gt-a-link">
-                            关于
-                        </a>
-                    
-                </div>
+            <div class="nav-item">
+                
+                <a href="/post/aboutme" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
             
         </div>
         <div style="text-align: center">
-            <form id="gridea-search-form" style="position: relative" data-update="1596178075079" action="/search/index.html">
+            <form id="gridea-search-form" style="position: relative" data-update="1631078479730"
+                action="/search/">
                 <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
                 <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
             </form>
         </div>
     </div>
 </nav>
-
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
         <div class="current-tag-container">
             <h2 class="title gt-c-content-color-first">
                 #Hexo
@@ -111,7 +133,7 @@
                         </a>
                     </div>
                     <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        <p>在安装完 Hexo 后很多人都会对自己的静态博客进行优化，期中有相当一部分人就会用到 <code>gulp-uglify</code> 这个插件来压缩 js 文件。然而有时候会遇到插件报错，这个时候可以使用 <code>Pump</code> 来替代原有的 <code>Pipe</code> 就可以解决问题。</p>
+                        在安装完 Hexo 后很多人都会对自己的静态博客进行优化，期中有相当一部分人就会用到 gulp-uglify 这个插件来压缩 js 文件。然而有时候会遇到插件报错，这个时候可以使用 Pump 来替代原有的 Pipe 就可以解决问题。
 
                     </div>
                     <div class="post-info">
@@ -137,8 +159,8 @@
                         </a>
                     </div>
                     <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        <p>自从博客在 Github 和 Coding 建站完成后，发现这两并不能部署自定义 SSL, 因此准备另谋出路。很快决定了国外的解决方案是 <a href="https://www.netlify.com/">Netlify</a>. 国内的速度本来试过 <a href="https://www.cachemoment.com/">魔门云</a>， 但依旧发现其免费套餐解析节点在台湾和日本，国内的访问速度并不乐观。而其付费起步就是每月一百软妹币以上，不是很划算。<a href="https://coding.net/">Coding.net</a>又不支持自定义 SSL 证书，导致多地部署不能很方便地同时实现 HTTPS 访问。<br></p>
-<p>终于，我想起了我的老朋友 <a href="https://i.zhujike.com/flag/5382">主机壳</a>（链接带推广，介意可自行搜索）</p>
+                        自从博客在 Github 和 Coding 建站完成后，发现这两并不能部署自定义 SSL, 因此准备另谋出路。很快决定了国外的解决方案是 Netlify. 国内的速度本来试过 魔门云， 但依旧发现其免费套餐解析节点在台湾和日本，国内的访问速度并不乐观。而其付费起步就是每月一百软妹币以上，不是很划算。Coding.net又不支持自定义 SSL 证书，导致多地部署不能很方便地同时实现 HTTPS 访问。
+终于，我想起了我的老朋友 主机壳（链接带推广，介意可自行搜索）
 
                     </div>
                     <div class="post-info">
@@ -172,7 +194,7 @@
                         </a>
                     </div>
                     <div class="gt-post-content post-abstract gt-c-content-color-second">
-                        <p>自己的博客，之前一直是基于 <code>WordPress</code> 搭载在某虚拟空间上的，虽说这个服务商也带有 <code>CDN</code> 的功能，但效果实在是不敢恭维，也有可能是钱没给够哈哈。于是乎现在想起来转投到静态博客的怀抱，尝试使用 <code>Hexo</code> 加上 <code>Github Page</code> <code>Coding Page</code> 来做这个博客。</p>
+                        自己的博客，之前一直是基于 WordPress 搭载在某虚拟空间上的，虽说这个服务商也带有 CDN 的功能，但效果实在是不敢恭维，也有可能是钱没给够哈哈。于是乎现在想起来转投到静态博客的怀抱，尝试使用 Hexo 加上 Github Page Coding Page 来做这个博客。
 
                     </div>
                     <div class="post-info">
