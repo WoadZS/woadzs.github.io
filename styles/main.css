@@ -483,7 +483,9 @@ ul li {
   display: flex;
   flex-direction: row;
   align-items: center;
-  display: inline-block;
+  /* 禁用，否则标题可能错位
+    display: inline-block;
+    */
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
@@ -1882,100 +1884,100 @@ code::-webkit-scrollbar-thumb:hover {
 }
 
         .gt-bg-theme-color-first {
-          background: #ffffff!important;
+          background: #f3f3f3!important;
         }
         
         .gt-bg-theme-color-second {
-          background: #ffffff!important;
+          background: #ebebeb!important;
         }
         
         .gt-bg-content-color-first {
-          background: #5f6169!important;
+          background: #252627!important;
         }
         
         .gt-bg-content-color-second {
-          background: #999fa7!important;
+          background: #676a6d!important;
         }
         
         .gt-bg-accent-color-first {
-          background: #f5bab2!important;
+          background: #DA2C38D9!important;
         }
         
         .gt-bg-accent-color-second {
-          background: RGBA(245,186,178,0.14)!important;
+          background: #da2c38d9!important;
         }
         
         .gt-c-theme-color-first {
-          color: #ffffff!important;
+          color: #f3f3f3!important;
         }
         
         .gt-c-theme-color-second {
-          color: #ffffff!important;
+          color: #ebebeb!important;
         }
         
         .gt-c-content-color-first {
-          color: #5f6169!important;
+          color: #252627!important;
         }
         
         .gt-c-content-color-second {
-          color: #999fa7!important;
+          color: #676a6d!important;
         }
         
         .gt-c-accent-color-first {
-          color: #f5bab2!important;
+          color: #DA2C38D9!important;
         }
         
         .gt-c-accent-color-second {
-          color: RGBA(245,186,178,0.14)!important;
+          color: #da2c38d9!important;
         }
         
         body {
-          color: #5f6169!important;
+          color: #252627!important;
         }
         
         a {
-          color: #f5bab2!important;
+          color: #DA2C38D9!important;
         }
         
         .post-content h1 {
           display: inline-block;
-          color: #5f6169!important;
+          color: #252627!important;
           position: relative!important;
-          background: linear-gradient(180deg, transparent 75%, RGBA(245,186,178,0.4) 0)!important;
+          background: linear-gradient(180deg, transparent 75%, #da2c38d9 0)!important;
         }
         
         .post-content h2 {
           display: inline-block;
-          color: #5f6169!important;
+          color: #252627!important;
           position: relative!important;
-          background: linear-gradient(180deg, transparent 75%, RGBA(245,186,178,0.4) 0)!important;
+          background: linear-gradient(180deg, transparent 75%, #da2c38d9 0)!important;
         }
         
         .gt-a-link {
-          color: #5f6169!important;
+          color: #252627!important;
           position: relative!important;
-          background: linear-gradient(180deg, transparent 75%, RGBA(245,186,178,0.4) 0)!important;
+          background: linear-gradient(180deg, transparent 75%, #da2c38d9 0)!important;
         }
         
         .gt-post-content a {
-          color: #f5bab2!important;
+          color: #DA2C38D9!important;
         }
         
         .gt-post-content blockquote {
-          background: RGBA(245,186,178,0.14)!important;
-          border-color: #f5bab2!important;
+          background: #da2c38d9!important;
+          border-color: #DA2C38D9!important;
         }
         
         .gt-post-content code {
-          background: RGBA(245,186,178,0.14)!important;
+          background: #da2c38d9!important;
         }
         
         input::placeholder {
-          color: #999fa7!important;
+          color: #676a6d!important;
         }
         
         .search-input {
-          color: #5f6169!important;
-          background-color: #ffffff!important;
+          color: #252627!important;
+          background-color: #ebebeb!important;
         }
          
