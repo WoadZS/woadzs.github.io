@@ -480,12 +480,10 @@ ul li {
   justify-content: space-between;
 }
 .navbar .navbar-brand {
-  display: flex;
+  display: flex !important;
   flex-direction: row;
   align-items: center;
-  /* 禁用，否则标题可能错位
-    display: inline-block;
-    */
+  display: inline-block;
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
