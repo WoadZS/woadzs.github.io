@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://blog.woadzs.me</id>
     <title>WoadZS&apos;s Blog</title>
-    <updated>2021-09-20T06:54:36.049Z</updated>
+    <updated>2021-09-21T14:51:36.354Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://blog.woadzs.me"/>
     <link rel="self" href="https://blog.woadzs.me/atom.xml"/>
-    <subtitle>知而不行 是为不知</subtitle>
+    <subtitle>雄心勃勃 垃圾一坨</subtitle>
     <logo>https://blog.woadzs.me/images/avatar.png</logo>
     <icon>https://blog.woadzs.me/favicon.ico</icon>
     <rights>All rights reserved 2021, WoadZS&apos;s Blog</rights>
